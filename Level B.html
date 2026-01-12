@@ -2,13 +2,12 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<title>Lớp Anh thầy Kết</title>
+<title>Lớp Anh thầy Kết - Game Từ vựng</title>
 
 <style>
 body {
   margin: 0;
   background-color: #ffffff; /* nền trắng */
-  
   color: #C62828;
   font-family: monospace;
   overflow: hidden;
@@ -59,7 +58,7 @@ body {
   opacity: 0.8;
 }
 
-/* ====== Ô INPUT + NÚT ====== */
+/* ====== INPUT + NÚT ====== */
 #inputContainer {
   position: fixed;
   bottom: 25px;
@@ -80,7 +79,7 @@ body {
   border: 2px solid #ff4500;
 }
 
-/* Nút đáp án và Next */
+/* Nút Đáp án và Next */
 button.game-btn {
   padding: 10px 16px;
   font-size: 16px;
@@ -157,12 +156,6 @@ button.game-btn:hover {
   <button id="showAnswerBtn" class="game-btn">Đáp án</button>
   <button id="nextWordBtn" class="game-btn">Next</button>
 </div>
-
-<!-- ÂM THANH NỔ -->
-<audio id="shootSound">
-  <source src="https://actions.google.com/sounds/v1/cartoon/explosion.ogg">
-</audio>
-
 
 <script>
 /* ====== BỘ TỪ VỰNG (BẠN TỰ THÊM) ====== */
@@ -2153,7 +2146,6 @@ const words = [
 
 ];
 
-
 /* ====== BIẾN GAME ====== */
 let shuffledWords = [];
 let current = null;
@@ -2200,7 +2192,7 @@ function fall() {
   }
 }
 
-/* ====== BẮN ====== */
+/* ====== NHẬP TỪ ====== */
 document.getElementById("input").addEventListener("keydown", e => {
   if (e.key === "Enter") {
     const typed = e.target.value.trim().toLowerCase();
@@ -2210,13 +2202,7 @@ document.getElementById("input").addEventListener("keydown", e => {
     if (typed === answer) {
       score++;
       document.getElementById("score").textContent = "Score: " + score;
-
-      const sound = document.getElementById("shootSound");
-      sound.currentTime = 0;
-      sound.play();
-
       celebrate();   // 🎉 PHÁO HOA
-
       inputBox.classList.remove("wrong");
       newWord();
     } else {
@@ -2246,14 +2232,11 @@ function celebrate() {
   for (let i = 0; i < 35; i++) {
     const c = document.createElement("div");
     c.className = "confetti";
-
     c.style.background =
       ["red", "hotpink", "cyan", "lime", "yellow", "violet"]
       [Math.floor(Math.random() * 6)];
-
     c.style.setProperty("--x", (Math.random() * 700 - 350) + "px");
     c.style.setProperty("--y", (-Math.random() * 400 - 150) + "px");
-
     document.body.appendChild(c);
     setTimeout(() => c.remove(), 1200);
   }
