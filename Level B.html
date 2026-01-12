@@ -29,7 +29,7 @@ body {
   100% { transform: translateX(-50%) translateX(0); }
 }
 
-
+/* ====== BOX TỪ ====== */
 #wordBox {
   position: absolute;
   top: 0;
@@ -40,18 +40,15 @@ body {
   max-width: 650px;
   padding: 12px 16px;
   box-sizing: border-box;
-}
-#wordBox {
   background: rgba(255, 255, 255, 0.9);
   border-radius: 12px;
 }
 
-
 #word {
   font-size: 34px;
   color: #D73535;
-  white-space: normal;     /* cho phép xuống dòng */
-  word-wrap: break-word;   /* không tràn màn hình */
+  white-space: normal;
+  word-wrap: break-word;
   line-height: 1.25;
 }
 
@@ -62,24 +59,51 @@ body {
   opacity: 0.8;
 }
 
-#input {
+/* ====== Ô INPUT + NÚT ====== */
+#inputContainer {
   position: fixed;
   bottom: 25px;
-  color: #ff4500;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 38px;
-  padding: 8px 80px;
-  width: 320px;
-  text-align: center; 
+  display: flex;
+  gap: 10px;
+  align-items: center;
 }
 
+#input {
+  color: #ff4500;
+  font-size: 38px;
+  padding: 8px 12px;
+  width: 320px;
+  text-align: center;
+  border-radius: 8px;
+  border: 2px solid #ff4500;
+}
+
+/* Nút đáp án và Next */
+button.game-btn {
+  padding: 10px 16px;
+  font-size: 16px;
+  background-color: #ffb347;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #fff;
+  transition: background-color 0.3s;
+}
+
+button.game-btn:hover {
+  background-color: #ff8c00;
+}
+
+/* ====== SCORE ====== */
 #score {
   position: fixed;
   top: 10px;
   right: 20px;
   font-size: 18px;
 }
+
 /* ====== PHÁO HOA ====== */
 .confetti {
   position: fixed;
@@ -115,25 +139,29 @@ body {
     opacity: 0;
   }
 }
-
-
 </style>
 </head>
 
 <body>
 
 <div id="score">Score: 0</div>
+
 <div id="wordBox">
   <div id="word"></div>
-  <div id="tagline"> KG Khoá Tổng ôn cấp tốc THPTQG, ôn vào 10. Lớp TOEIC 2-4 skills. Onl/off Đà Nẵng.</div>
+  <div id="tagline">KG Khoá Tổng ôn cấp tốc THPTQG, ôn vào 10. Lớp TOEIC 2-4 skills. Onl/off Đà Nẵng.</div>
 </div>
-<input id="input" placeholder="Gõ rồi nhấn Enter…" autofocus />
+
+<!-- INPUT + NÚT -->
+<div id="inputContainer">
+  <input id="input" placeholder="Gõ rồi nhấn Enter…" autofocus />
+  <button id="showAnswerBtn" class="game-btn">Đáp án</button>
+  <button id="nextWordBtn" class="game-btn">Next</button>
+</div>
 
 <!-- ÂM THANH NỔ -->
 <audio id="shootSound">
   <source src="https://actions.google.com/sounds/v1/cartoon/explosion.ogg">
 </audio>
-
 
 
 <script>
@@ -2168,7 +2196,7 @@ function fall() {
   } else {
     newWord(); // rơi tới đáy → từ mới
     y = 0;   
-    requestAnimationFrame(fall);  // gọi lại chuẩn
+    requestAnimationFrame(fall);
   }
 }
 
@@ -2177,35 +2205,43 @@ document.getElementById("input").addEventListener("keydown", e => {
   if (e.key === "Enter") {
     const typed = e.target.value.trim().toLowerCase();
     const answer = current[1].toLowerCase();
+    const inputBox = document.getElementById("input");
 
-const inputBox = document.getElementById("input");
+    if (typed === answer) {
+      score++;
+      document.getElementById("score").textContent = "Score: " + score;
 
-if (typed === answer) {
-  score++;
-  document.getElementById("score").textContent = "Score: " + score;
+      const sound = document.getElementById("shootSound");
+      sound.currentTime = 0;
+      sound.play();
 
-  const sound = document.getElementById("shootSound");
-  sound.currentTime = 0;
-  sound.play();
+      celebrate();   // 🎉 PHÁO HOA
 
-  celebrate();   // 🎉 PHÁO HOA
-
-  inputBox.classList.remove("wrong");
-  newWord();
-} else {
-  // nhập sai → cảnh báo
-  inputBox.classList.add("wrong");
-
-  // xoá hiệu ứng sau 300ms để còn gõ lại
-  setTimeout(() => {
-    inputBox.classList.remove("wrong");
-  }, 300);
-}
+      inputBox.classList.remove("wrong");
+      newWord();
+    } else {
+      inputBox.classList.add("wrong");
+      setTimeout(() => inputBox.classList.remove("wrong"), 300);
+    }
 
     e.preventDefault();
   }
 });
 
+/* ====== NÚT ĐÁP ÁN ====== */
+document.getElementById("showAnswerBtn").addEventListener("click", () => {
+  if (current) {
+    document.getElementById("input").value = current[1]; // hiện đáp án
+    document.getElementById("input").focus();
+  }
+});
+
+/* ====== NÚT NEXT ====== */
+document.getElementById("nextWordBtn").addEventListener("click", () => {
+  newWord();
+});
+
+/* ====== PHÁO HOA ====== */
 function celebrate() {
   for (let i = 0; i < 35; i++) {
     const c = document.createElement("div");
@@ -2218,9 +2254,7 @@ function celebrate() {
     c.style.setProperty("--x", (Math.random() * 700 - 350) + "px");
     c.style.setProperty("--y", (-Math.random() * 400 - 150) + "px");
 
-
     document.body.appendChild(c);
-
     setTimeout(() => c.remove(), 1200);
   }
 }
