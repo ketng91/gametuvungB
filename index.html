@@ -3,16 +3,29 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lớp Anh thầy Kết - Game Từ vựng</title>
+<title>Lớp Anh thầy Kết - Game Từ vựng B</title>
 
 <style>
 body {
-  margin: 0;
+   margin: 0;
   background-color: #ffffff;
   color: #C62828;
   font-family: sans-serif;
   overflow-x: hidden;
 }
+/*
+ margin: 0;
+  background-image: url("backC.jpg");
+  background-size: cover;        /* phủ full màn hình */
+  background-position: center 30%;   /* căn giữa */
+  background-repeat: no-repeat;
+  background-attachment: fixed;  /* không bị trôi khi animation */
+  
+  color: #C62828;
+  font-family: monospace;
+  overflow: hidden;
+}
+*/
 
 /* CẢNH BÁO */
 .wrong {
@@ -128,7 +141,7 @@ button.game-btn:hover {
 
 <div id="wordBox">
   <div id="word"></div>
-  <div id="tagline">KG Khoá Tổng ôn THPTQG, Lớp TOEIC 2-4 skills</div>
+  <div id="tagline">Lớp Anh thầy Kết: KG onl/off Đà Nẵng các khoá Khoá Tổng ôn THPTQG, Anh vào 10, Lớp TOEIC 2-4 skills</div>
 </div>
 
 <div id="inputContainer">
@@ -2132,7 +2145,7 @@ let shuffledWords = [];
 let current = null;
 let score = 0;
 let y = 0;
-const speed = 0.5;
+const speed = 0.3;
 
 function shuffleWords() {
   shuffledWords = [...words];
